@@ -1,0 +1,25 @@
+{
+  "day": "2018-5-9",
+  "map": {
+    "c": "conditions",
+    "p": "price",
+    "s": "size",
+    "x": "exchange",
+    "t": "timestamp"
+  },
+  "msLatency": 2,
+  "status": "success",
+  "symbol": "BTC-USD",
+  "ticks": [
+    {
+      "p": 9349.44,
+      "s": 0.03,
+      "x": 2,
+      "c": [
+        2,
+        0
+      ],
+      "t": 1525930460102
+    }
+  ]
+}
