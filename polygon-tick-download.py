@@ -42,11 +42,12 @@ def valid_date(s):
         raise argparse.ArgumentTypeError(msg)
 
 
-def main(cfrom, cto, start_date, api_key):
-    print("cfrom-", cfrom)
-    print("cto-", cto)
-    print("start_date-", start_date)
-    print("api_key-", api_key)
+def main(cfrom, cto, start_date, api_key, out_dir):
+    print('cfrom-', cfrom)
+    print('cto-', cto)
+    print('start_date-', start_date)
+    print('api_key-', api_key)
+    print('out_dir-', out_dir)
 
     url = "%s/%s/%s/%s" % (base_url, cfrom, cto, start_date)
     results = download(url, api_key)
@@ -64,7 +65,12 @@ def main(cfrom, cto, start_date, api_key):
         for c in result['c']:
             tick.conditions.append(c)
 
-    with open("foo.pbuf", "wb") as fout:
+    if out_dir:
+        fname = '%s/%s_%s' % (out_dir, ticks.symbol, ticks.day)
+    else:
+        fname = '%s_%s' % (ticks.symbol, ticks.day)
+
+    with open(fname, 'wb') as fout:
         fout.write(ticks.SerializeToString())
 
 
@@ -75,6 +81,7 @@ if __name__ == '__main__':
     parser.add_argument('--cto', type=str, required=True, help='The currency to', default='USD')
     parser.add_argument('--start_date', type=valid_date, help='The start date - format YYYY-MM-DD')
     parser.add_argument('--api_key', type=str, required=True, help='API key')
+    parser.add_argument('--out_dir', type=str, required=False, help='The output directory')
 
     args = parser.parse_args()
-    main(args.cfrom, args.cto, args.start_date, args.api_key)
+    main(args.cfrom, args.cto, args.start_date, args.api_key, args.out_dir)
