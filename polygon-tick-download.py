@@ -2,6 +2,7 @@ import argparse
 from datetime import datetime
 import json
 import requests
+import ticks_pb2
 
 base_url = 'https://api.polygon.io/v1/historic/crypto'
 
@@ -49,7 +50,22 @@ def main(cfrom, cto, start_date, api_key):
 
     url = "%s/%s/%s/%s" % (base_url, cfrom, cto, start_date)
     results = download(url, api_key)
-    print(len(results))
+
+    ticks = ticks_pb2.Ticks()
+    ticks.symbol = "%s-%s" % (cfrom, cto)
+    ticks.day = start_date.strftime("%Y-%m-%d")
+
+    for result in results:
+        tick = ticks.ticks.add()
+        tick.timestamp = result['t']
+        tick.size = result['s']
+        tick.price = result['p']
+        tick.exchange = result['x']
+        for c in result['c']:
+            tick.conditions.append(c)
+
+    with open("foo.pbuf", "wb") as fout:
+        fout.write(ticks.SerializeToString())
 
 
 if __name__ == '__main__':

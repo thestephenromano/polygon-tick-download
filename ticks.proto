@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message Ticks {
+
+    string symbol = 1;
+    string day = 2;
+    repeated Tick ticks = 3;
+
+    message Tick {
+        uint64 timestamp = 1;
+        float size = 2;
+        float price = 3;
+        uint32 exchange = 4;
+        repeated int32 conditions = 5;
+    }
+}
